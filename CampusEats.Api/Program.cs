@@ -37,14 +37,21 @@ builder.Services
 builder.Services.AddAuthorization();
 
 // 4. CORS Policy for Deployed Frontend (Task 03)
-builder.Services.AddCors(o => o.AddPolicy("Frontend", p =>
-    p.WithOrigins(
-        "https://campuseats-deployment.netlify.app",
-        "https://campuseats-web.vercel.app"
-    )
-    .SetIsOriginAllowed(origin => true)
-    .AllowAnyHeader()
-    .AllowAnyMethod()));
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 // 5. Controllers
 builder.Services.AddControllers();
@@ -121,10 +128,11 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 // 9. Middleware pipeline
-app.UseHttpsRedirection();
-
-// Task 03 Step 2: Use CORS policy before MapControllers
+// Task 03 Step 2: CORS must run first before redirects, auth, or controllers
 app.UseCors("Frontend");
+app.UseCors();
+
+app.UseHttpsRedirection();
 
 // IMPORTANT: Authentication must come BEFORE Authorization
 app.UseAuthentication();

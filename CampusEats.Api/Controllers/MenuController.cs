@@ -1,10 +1,12 @@
 using CampusEats.Api.Dtos;
 using CampusEats.Api.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CampusEats.Api.Controllers;
 
+[EnableCors("Frontend")]
 [ApiController]
 [Route("api/[controller]")]
 public class MenuController : ControllerBase
