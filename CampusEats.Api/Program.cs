@@ -123,16 +123,13 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// 8. Swagger (Enabled for development and cloud testing verification)
-app.UseSwagger();
-app.UseSwaggerUI();
-
-// 9. Middleware pipeline
-// Task 03 Step 2: CORS must run first before redirects, auth, or controllers
+// 8. CORS Policy - MUST run before everything else
 app.UseCors("Frontend");
 app.UseCors();
 
-app.UseHttpsRedirection();
+// 9. Swagger (Enabled for development and cloud testing verification)
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // IMPORTANT: Authentication must come BEFORE Authorization
 app.UseAuthentication();
