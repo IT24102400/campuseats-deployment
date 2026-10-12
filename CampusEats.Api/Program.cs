@@ -38,9 +38,13 @@ builder.Services.AddAuthorization();
 
 // 4. CORS Policy for Deployed Frontend (Task 03)
 builder.Services.AddCors(o => o.AddPolicy("Frontend", p =>
-    p.WithOrigins("https://campuseats-web.vercel.app")
-     .AllowAnyHeader()
-     .AllowAnyMethod()));
+    p.WithOrigins(
+        "https://campuseats-deployment.netlify.app",
+        "https://campuseats-web.vercel.app"
+    )
+    .SetIsOriginAllowed(origin => true)
+    .AllowAnyHeader()
+    .AllowAnyMethod()));
 
 // 5. Controllers
 builder.Services.AddControllers();

@@ -7,9 +7,12 @@ function MenuPage() {
   const [query, setQuery] = useState("");
   const debounced = useDebounce(query, 400);
   
-  // Task 01 Step 3: Read API base URL from the environment variable
-  const API = import.meta.env.VITE_API_URL;
-  const menuUrl = API ? `${API}/api/menu` : "/menu.json";
+  // Task 01 Step 3: Read API base URL from the environment variable (robust URL handling)
+  let rawApi = (import.meta.env.VITE_API_URL || "").trim().replace(/\/+$/, "");
+  if (rawApi && !rawApi.startsWith("http://") && !rawApi.startsWith("https://")) {
+    rawApi = `https://${rawApi}`;
+  }
+  const menuUrl = rawApi ? `${rawApi}/api/menu` : "/menu.json";
 
   // Using our fetch hook with the dynamic environment-configured endpoint
   const { data: dishes, isLoading, error } = useFetch(menuUrl);
